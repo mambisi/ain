@@ -13,4 +13,4 @@ server:
 steps:
 - name: greeting
   commands:
-  - echo hello world test
+  - echo hello world test world
