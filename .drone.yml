@@ -2,6 +2,12 @@ kind: pipeline
 type: ssh
 name: echo-something
 
+trigger:
+  branch:
+    - master
+  event:
+    - push
+
 server:
   host:
     from_secret: host
