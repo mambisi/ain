@@ -1,7 +1,13 @@
 ---
 kind: pipeline
 type: ssh
-name: default
+name: echo-something
+
+trigger:
+  branch:
+  - master
+  event:
+  - push
 
 server:
   host:
@@ -15,9 +21,3 @@ steps:
 - name: greeting
   commands:
   - echo hello world test
-
-trigger:
-  branch:
-  - master
-  event:
-  - push
