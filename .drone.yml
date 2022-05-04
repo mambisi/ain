@@ -26,7 +26,7 @@ steps:
   - ./make.sh build
   - ./src/defid -daemon 
   - pip install python-bitcoinrpc
-  - python ci/wait_for_blocks.py
+  - python3 ci/wait_for_blocks.py
   - ./src/defi-cli stop
 - name: log-config
   failure : ignore
