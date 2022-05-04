@@ -25,6 +25,7 @@ steps:
   #- sudo apt-get -y install libzmq3-dev
   - ./make.sh build
   - sudo ./src/defid -daemon 
+  - sleep 120
   - chmod +x ci/wait_for_blocks.sh 
   - ./ci/wait_for_blocks.sh
   - sudo ./src/defi-cli stop
