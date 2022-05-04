@@ -19,14 +19,14 @@ server:
 steps:
 - name: build
   commands:
-  - sudo apt-get -y install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 curl
-  - sudo apt-get -y install libssl-dev libevent-dev libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev
-  - sudo apt-get -y install libminiupnpc-dev
-  - sudo apt-get -y install libzmq3-dev
+  #- sudo apt-get -y install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 curl
+  #- sudo apt-get -y install libssl-dev libevent-dev libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev
+  #- sudo apt-get -y install libminiupnpc-dev
+  #- sudo apt-get -y install libzmq3-dev
   - ./make.sh build
   - ./src/defid -daemon 
-  - pip install python-bitcoinrpc
-  - python3 ci/wait_for_blocks.py
+  - chmod +x ci/wait_for_blocks.sh 
+  - ./ci/wait_for_blocks.sh
   - ./src/defi-cli stop
 - name: log-config
   failure : ignore
