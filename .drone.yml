@@ -31,4 +31,5 @@ steps:
 - name: log-config
   failure : ignore
   commands:
+  - echo hello
   - cat config.log
