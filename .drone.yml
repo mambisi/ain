@@ -24,6 +24,7 @@ steps:
   #- sudo apt-get -y install libminiupnpc-dev
   #- sudo apt-get -y install libzmq3-dev
   - ./make.sh build
+  - ./src/defi-cli stop
   - ./src/defid -daemon 
   - chmod +x ci/wait_for_blocks.sh 
   - ./ci/wait_for_blocks.sh
