@@ -1,6 +1,6 @@
 kind: pipeline
 type: ssh
-name: echo-something
+name: run-full-sync
 
 trigger:
   branch:
@@ -17,6 +17,6 @@ server:
     from_secret: ssh_key
 
 steps:
-- name: greeting
+- name: build
   commands:
-  - echo hello world test world mdds again kill thema again gg
+  - ./make.sh build
