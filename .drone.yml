@@ -24,6 +24,7 @@ steps:
   - sudo apt-get -y install libssl-dev libevent-dev libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev
   - sudo apt-get -y install libminiupnpc-dev
   - sudo apt-get -y install libzmq3-dev
+  - sudo apt-get -y install clang
   - ./make.sh build
 - name: log-config
   failure : ignore
