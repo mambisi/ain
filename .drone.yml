@@ -24,12 +24,13 @@ steps:
   #- sudo apt-get -y install libminiupnpc-dev
   #- sudo apt-get -y install libzmq3-dev
   - ./make.sh build
-  - ./src/defid -daemon
-  - sleep 120
+  - ./src/defid -daemon -datadir=/tmp/.defi
+  - sleep 10
   - ./src/defi-cli getblockchaininfo
   - chmod +x ci/wait_for_blocks.sh 
   - ./ci/wait_for_blocks.sh
   - ./src/defi-cli stop
+  - sudo rm -rf /tmp/.defi
 - name: log-config
   failure : ignore
   commands:
