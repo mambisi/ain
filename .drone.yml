@@ -24,14 +24,16 @@ steps:
   #- sudo apt-get -y install libminiupnpc-dev
   #- sudo apt-get -y install libzmq3-dev
   - ./make.sh build
-  - ./src/defid
-  - sleep 120
+  - ./src/defid -daemon
+  - sleep 20
   - ./src/defi-cli getblockchaininfo
   - chmod +x ci/wait_for_blocks.sh 
   - ./ci/wait_for_blocks.sh
+- name: teardown
+  comands:
   - ./src/defi-cli stop
-- name: log-config
-  failure : ignore
-  commands:
-  - echo hello
-  - cat config.log
+  - sudo pkill -f -9 defid
+  when:
+    status:
+    - success
+    - failure
