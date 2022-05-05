@@ -26,27 +26,27 @@ steps:
   - ./make.sh build
   - ./src/defid -daemon
   - sleep 20
-  - ./src/defi-cli getblockchaininfo
   - |
     sh -c '
     block=0
     attempts=0
     while [ $block -lt 10000 ]; do
         sleep 5
-        b=$(./src/defi-cli getblockchaininfo | jq '.blocks' )
-        block=$${b:-$block}
-        echo "===> Block Height $block"
+        h=$(./src/defi-cli getblockchaininfo | jq '.blocks' )
+        b=$${h:-$block}
         if [ $attempts -gt 12 ]; then
-            echo "Failed to bootstrap after a minute."
+            echo "Failed to boot up node after a minute."
             exit 1
         fi
-        attempts=$(($attempts + 1))
+        if [ $block -eq $b ]; then
+          attempts=$(($attempts + 1))
+        fi
+        block=$${b:-$block}
+        echo "===> Block Height $block"
     done    
     '
-  - ./ci/wait_for_blocks.sh
 - name: teardown
   commands:
-  - ./src/defi-cli stop
   - sudo pkill -f -9 defid
   when:
     status:
