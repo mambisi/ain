@@ -24,15 +24,12 @@ steps:
   #- sudo apt-get -y install libminiupnpc-dev
   #- sudo apt-get -y install libzmq3-dev
   - ./make.sh build
-  - tmp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
-  - echo "Data Dir $tmp_dir"
-  - ./src/defid -daemon -datadir=$tmp_dir -rpcuser=bob -rpcpassword=bob
+  - ./src/defid -daemon
   - sleep 20
-  - ./src/defi-cli -datadir=$tmp_dir -rpcuser=bob -rpcpassword=bob getblockchaininfo
+  - ./src/defi-cli getblockchaininfo
   - chmod +x ci/wait_for_blocks.sh 
   - ./ci/wait_for_blocks.sh
-  - ./src/defi-cli -datadir=$tmp_dir -rpcuser=bob -rpcpassword=bob stop
-  - sudo rm -rf $tmp_dir
+  - ./src/defi-cli stop
 - name: log-config
   failure : ignore
   commands:
