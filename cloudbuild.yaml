@@ -1,6 +1,3 @@
 steps:
-- name: 'ubuntu'
-- args: ['echo', 'Hello Step 1']
-steps:
-- name: 'ubuntu'
-- args: ['echo', 'Hello Step 2']
+- name: 'gcr.io/defichain/ain-base-image'
+- args: ['./make.sh', 'build']
