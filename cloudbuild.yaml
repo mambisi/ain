@@ -1,5 +1,5 @@
 steps:
-- name: 'gcr.io/defichiain/ain-base-image'
-  args: ['echo', 'build']
+- name: 'gcr.io/${PROJECT_ID}/ain-base-image'
+  args: ['./make.sh', 'build']
 options:
   logging: CLOUD_LOGGING_ONLY
