@@ -1,5 +1,5 @@
 steps:
 - name: 'gcr.io/defichain/ain-base-image'
-- args: ['./make.sh', 'build']
+  args: ['./make.sh', 'build']
 options:
   logging: CLOUD_LOGGING_ONLY
