@@ -1,0 +1,6 @@
+steps:
+- name: 'ubuntu'
+- args: ['echo', 'Hello Step 1']
+steps:
+- name: 'ubuntu'
+- args: ['echo', 'Hello Step 2']
