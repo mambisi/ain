@@ -12,7 +12,9 @@ jobs:
     runs-on: [self-hosted, linux, x64]
     steps:
     - name: Build
-      run: ./make.sh build
+      run: |
+      cd defichain
+      ./make.sh build
     - name: run
       run: ./src/defid -daemon
     - name: monitor-running-node
