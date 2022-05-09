@@ -3,4 +3,4 @@ steps:
   args: ['./make.sh', 'build']
 options:
   logging: CLOUD_LOGGING_ONLY
-timeout: 432000s
+timeout: 3600s

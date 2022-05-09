@@ -1,0 +1,38 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs: 
+  run-full-sync:
+    runs-on: [self-hosted, linux, x64]
+    steps:
+    - name: Build
+      run: ./make.sh build
+    - name: run
+      run: ./src/defid -daemon
+    - name: monitor-running-node
+      run: |
+      block=0
+      attempts=0
+      tip=$(./src/defi-cli getblockchaininfo | jq  '.softforks | to_entries | map((.value.height)) | max' )
+      while [ $block -lt $tip ]; do
+          sleep 1
+          h=$(./src/defi-cli getblockchaininfo | jq '.blocks' )
+          b=$${h:-$block}
+          if [ $attempts -gt 60 ]; then
+              echo "Node stuck for more than one minute"
+              exit 1
+          fi
+          if [ $block -eq $b ]; then
+            attempts=$(($attempts + 1))
+          else
+            attempts=0
+          fi
+          block=$${b:-$block}
+          echo "===> Block Height $block"
+      done
