@@ -28,10 +28,7 @@ jobs:
         while [ $block -lt 10000 ]; do
             sleep 1
             echo $(./src/defi-cli getblockchaininfo | jq '.blocks' )
-            h=$(./src/defi-cli getblockchaininfo | jq '.blocks' )
-            echo "H -> $h"
-            b=$${h:-$block}
-            echo "B -> $b"
+            block=$(./src/defi-cli getblockchaininfo | jq '.blocks' )
             if [ $attempts -gt 60 ]; then
                 echo "Node stuck for more than one minute"
                 exit 1
