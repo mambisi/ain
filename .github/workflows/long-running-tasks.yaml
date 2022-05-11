@@ -23,6 +23,6 @@ jobs:
       run: |
         sleep 20 
     - uses: actions-rs/cargo@v1
-        with:
-          command: run
-          args: --release --manifest-path="ci/node-monitor"
+      with:
+        command: run
+        args: --release --manifest-path="ci/node-monitor"
