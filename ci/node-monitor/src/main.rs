@@ -1,12 +1,43 @@
 use bitcoincore_rpc::{Auth, Client, RpcApi};
+use configparser::ini::Ini;
+use std::path::PathBuf;
+
+use clap::Parser;
+
+/// Simple program to greet a person
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    /// Name of the person to greet
+    #[clap(short, long)]
+    config: PathBuf,
+}
 
 fn main() {
+    let args = Args::parse();
+
+    let config_file_path: PathBuf = args.config;
+    let mut config = Ini::new();
+
+    // You can easily load a file to get a clone of the map:
+    config.load(config_file_path.as_path()).unwrap();
+    let rpcuser = config.get("default", "rpcuser").unwrap();
+    let rpcpassword = config.get("default", "rpcpassword").unwrap();
+    let rpcport = config.get("main", "rpcport").unwrap();
+    let rpcbind = config.get("main", "rpcbind").unwrap();
+
+    println!("RPC USER: {rpcuser}");
+    println!("RPC PASSWORD: {rpcpassword}");
+
+    println!("BIND {}", &format!("http://{rpcbind}:{rpcport}"));
+
     let rpc = Client::new(
-        "http://localhost:8332",
-        Auth::UserPass("".to_string(), "".to_string()),
+        &format!("http://{rpcbind}:{rpcport}"),
+        Auth::UserPass(rpcuser, rpcpassword),
     )
     .unwrap();
     let blockchain_info = rpc.get_blockchain_info().unwrap();
+    println!("{:#?}", blockchain_info);
     let mut prev_height = 0;
     let mut attempts = 0;
     let end_height = 10000;
@@ -21,7 +52,7 @@ fn main() {
         }
         if attempts >= 60 {
             println!("Block Stuck on ${prev_height} for 60 secs");
-            break 
+            break;
         }
         prev_height = height;
         println!("Block Height ${prev_height}");

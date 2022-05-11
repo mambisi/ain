@@ -28,7 +28,4 @@ jobs:
     - name: Wait for node
       run: |
         sleep 20 
-    - uses: actions-rs/cargo@v1
-      with:
-        command: run
-        args: --release --manifest-path="./ci/node-monitor/Cargo.toml"
+        cargo run --manifest-path="./ci/node-monitor/Cargo.toml" --release -- --config="${HOME}/.defi/defi.conf"
