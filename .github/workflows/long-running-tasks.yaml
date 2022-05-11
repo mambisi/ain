@@ -25,7 +25,7 @@ jobs:
         sh -c '
         block=0
         attempts=0
-        tip=$(./src/defi-cli getblockchaininfo | jq  '.softforks | to_entries | map((.value.height)) | max' )
+        tip=10000
         while [ $block -lt $tip ]; do
             sleep 1
             h=$(./src/defi-cli getblockchaininfo | jq '.blocks' )
