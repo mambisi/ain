@@ -25,8 +25,7 @@ jobs:
         sh -c '
         block=0
         attempts=0
-        tip=10000
-        while [ $block -lt $tip ]; do
+        while [ $block -lt 10000 ]; do
             sleep 1
             h=$(./src/defi-cli getblockchaininfo | jq '.blocks' )
             b=$${h:-$block}
