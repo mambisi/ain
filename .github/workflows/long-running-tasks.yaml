@@ -27,6 +27,7 @@ jobs:
         attempts=0
         while [ $block -lt 10000 ]; do
             sleep 1
+            echo $(./src/defi-cli getblockchaininfo | jq '.' )
             h=$(./src/defi-cli getblockchaininfo | jq '.blocks' )
             b=$${h:-$block}
             if [ $attempts -gt 60 ]; then
