@@ -22,23 +22,4 @@ jobs:
     - name: monitor-running-node
       run: |
         sleep 20
-        sh -c '
-        block=0
-        attempts=0
-        while [ $block -lt 10000 ]; do
-            sleep 1
-            echo $(./src/defi-cli getblockchaininfo | jq '.blocks' )
-            block=$(./src/defi-cli getblockchaininfo | jq '.blocks' )
-            if [ $attempts -gt 60 ]; then
-                echo "Node stuck for more than one minute"
-                exit 1
-            fi
-            if [ $block -eq $b ]; then
-              attempts=$(($attempts + 1))
-            else
-              attempts=0
-            fi
-            block=$${b:-$block}
-            echo "===> Block Height $block"
-        done    
-        '
+        cargo run --manifest-path="ci/node-monitor"
