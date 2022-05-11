@@ -27,5 +27,6 @@ jobs:
       run: ./src/defid -daemon
     - name: Wait for node
       run: |
-        sleep 20 
-        cargo run --manifest-path="./ci/node-monitor/Cargo.toml" --release -- --config="${HOME}/.defi/defi.conf"
+        sleep 20
+        DEFIDATADIR=~/.defi
+        cargo run --manifest-path="./ci/node-monitor/Cargo.toml" --release -- --config="${DEFIDATADIR}/defi.conf"

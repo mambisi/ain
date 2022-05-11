@@ -26,18 +26,13 @@ fn main() {
     let rpcport = config.get("main", "rpcport").unwrap();
     let rpcbind = config.get("main", "rpcbind").unwrap();
 
-    println!("RPC USER: {rpcuser}");
-    println!("RPC PASSWORD: {rpcpassword}");
-
-    println!("BIND {}", &format!("http://{rpcbind}:{rpcport}"));
-
     let rpc = Client::new(
         &format!("http://{rpcbind}:{rpcport}"),
         Auth::UserPass(rpcuser, rpcpassword),
     )
     .unwrap();
+    
     let blockchain_info = rpc.get_blockchain_info().unwrap();
-    println!("{:#?}", blockchain_info);
     let mut prev_height = 0;
     let mut attempts = 0;
     let end_height = 10000;
