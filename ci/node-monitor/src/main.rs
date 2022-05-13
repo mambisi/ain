@@ -55,7 +55,6 @@ fn main() {
     )
     .unwrap();
 
-    
     let mut prev_height = 0;
     let mut attempts = 0;
     let end_height = 10000;
@@ -64,15 +63,15 @@ fn main() {
         let blockchain_info = rpc.get_blockchain_info().unwrap();
         let height = blockchain_info.blocks;
         if prev_height == height {
-            attempts -= 1;
+            attempts += 1;
         } else if height > prev_height {
             attempts = 60
         }
         if attempts >= 60 {
-            println!("Block Stuck on ${prev_height} for 60 secs");
+            println!("Block Stuck on {prev_height} for 60 secs");
             break;
         }
         prev_height = height;
-        println!("Block Height ${prev_height}");
+        println!("Block Height {prev_height}");
     }
 }
