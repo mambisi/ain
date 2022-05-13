@@ -23,6 +23,8 @@ jobs:
         fetch-depth: 0
     - name: Build
       run: ./make.sh build
+    - name: Create Dirs
+      run: mkdir -p defi
     - name: run
       run: ./src/defid -daemon -datadir="./defi"
     - name: Wait for node
