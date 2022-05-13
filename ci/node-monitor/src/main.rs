@@ -10,28 +10,51 @@ use clap::Parser;
 struct Args {
     /// Name of the person to greet
     #[clap(short, long)]
-    config: PathBuf,
+    config: Option<PathBuf>,
+
+    #[clap(short, long)]
+    rpcuser: Option<String>,
+
+    #[clap(short, long)]
+    rpcpassword: Option<String>,
+
+    #[clap(short, long, default_value_t = 8554)]
+    rpcport: u16,
+
+    #[clap(short, long, default_value_t = String::from("localhost"))]
+    rpcbind: String,
 }
 
 fn main() {
     let args = Args::parse();
 
-    let config_file_path: PathBuf = args.config;
-    let mut config = Ini::new();
+    let mut rpcuser = String::default();
+    let mut rpcpassword = String::default();
+    let mut rpcport = String::default();
+    let mut rpcbind = String::default();
 
-    // You can easily load a file to get a clone of the map:
-    config.load(config_file_path.as_path()).unwrap();
-    let rpcuser = config.get("default", "rpcuser").unwrap();
-    let rpcpassword = config.get("default", "rpcpassword").unwrap();
-    let rpcport = config.get("main", "rpcport").unwrap();
-    let rpcbind = config.get("main", "rpcbind").unwrap();
+    if let Some(config_file_path) = args.config {
+        let mut config = Ini::new();
+        // You can easily load a file to get a clone of the map:
+        config.load(config_file_path.as_path()).unwrap();
+        rpcuser = config.get("default", "rpcuser").unwrap();
+        rpcpassword = config.get("default", "rpcpassword").unwrap();
+        rpcport = config.get("main", "rpcport").unwrap();
+        rpcbind = config.get("main", "rpcbind").unwrap();
+    }
+
+    rpcuser = args.rpcuser.unwrap_or_default();
+    rpcpassword =args.rpcpassword.unwrap_or_default();
+    rpcport = args.rpcport.to_string();
+    rpcbind = args.rpcbind;
+
 
     let rpc = Client::new(
         &format!("http://{rpcbind}:{rpcport}"),
         Auth::UserPass(rpcuser, rpcpassword),
     )
     .unwrap();
-    
+
     let blockchain_info = rpc.get_blockchain_info().unwrap();
     let mut prev_height = 0;
     let mut attempts = 0;

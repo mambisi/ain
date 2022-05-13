@@ -23,11 +23,13 @@ jobs:
         fetch-depth: 0
     - name: Build
       run: ./make.sh build
+    - name: Remove Dirs
+      run: rm -rf defi
     - name: Create Dirs
       run: mkdir -p defi
     - name: run
-      run: ./src/defid -datadir="./defi"
+      run: ./src/defid -datadir="./defi" -server -rpcuser=bob -rpcpassword=bob
     - name: Wait for node
       run: |
         sleep 20
-        cargo run --manifest-path="./ci/node-monitor/Cargo.toml" --release -- --config="./defi/defi.conf"
+        cargo run --manifest-path="./ci/node-monitor/Cargo.toml" --release -- --rpcuser="bob" --rpcpassword="bob"
