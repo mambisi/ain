@@ -28,7 +28,7 @@ jobs:
     - name: Create Dirs
       run: mkdir -p defi
     - name: run
-      run: ./src/defid -datadir="./defi" -server -rpcuser=bob -rpcpassword=bob
+      run: ./src/defid -datadir="./defi" -server -rpcuser=bob -rpcpassword=bob -daemon
     - name: Wait for node
       run: |
         sleep 20
