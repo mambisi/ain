@@ -26,9 +26,8 @@ jobs:
     - name: Create Dirs
       run: mkdir -p defi
     - name: run
-      run: ./src/defid -daemon -datadir="./defi"
+      run: ./src/defid -datadir="./defi"
     - name: Wait for node
       run: |
         sleep 20
-        DEFIDATADIR=~/.defi
         cargo run --manifest-path="./ci/node-monitor/Cargo.toml" --release -- --config="./defi/defi.conf"
