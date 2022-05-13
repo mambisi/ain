@@ -55,14 +55,14 @@ fn main() {
     )
     .unwrap();
 
-    let blockchain_info = rpc.get_blockchain_info().unwrap();
+    
     let mut prev_height = 0;
     let mut attempts = 0;
     let end_height = 10000;
     while prev_height < end_height {
         std::thread::sleep(std::time::Duration::from_secs(1));
+        let blockchain_info = rpc.get_blockchain_info().unwrap();
         let height = blockchain_info.blocks;
-
         if prev_height == height {
             attempts -= 1;
         } else if height > prev_height {
