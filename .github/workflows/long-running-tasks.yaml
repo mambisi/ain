@@ -24,7 +24,9 @@ jobs:
     - name: Build
       run: ./make.sh build
     - name: run
-      run: ./src/defid -daemon
+      run: |
+      DEFIDATADIR=~/.defi
+      ./src/defid -daemon -datadir="${DEFIDATADIR}"
     - name: Wait for node
       run: |
         sleep 20
