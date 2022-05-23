@@ -60,11 +60,13 @@ fn main() {
 
     let mut prev_height = 0;
     let mut attempts = 0;
-    let end_height = blockchain_info.headers;
+    let mut end_height = blockchain_info.headers;
+    let timer = std::time::Instant::now();
+
     println!("Node Monitor is running, TIP: {end_height}");
     while prev_height <= end_height {
         std::thread::sleep(std::time::Duration::from_secs(1));
-        let height = rpc.get_block_count().unwrap();
+        let height = rpc.get_block_count().unwrap_or_default();
         if prev_height == height {
             attempts += 1;
         } else if height > prev_height {
@@ -76,6 +78,11 @@ fn main() {
         if attempts >= MAX_ATTEMPS {
             println!("Block Stuck on {prev_height} for than {MAX_ATTEMPS} secs");
             break;
+        }
+        let elapsed = timer.elapsed().as_secs();
+        if elapsed % 30 == 0 {
+            let blockchain_info = rpc.get_blockchain_info().unwrap();
+            end_height = blockchain_info.headers;
         }
         prev_height = height;
     }
