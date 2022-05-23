@@ -1,4 +1,4 @@
-name: Intergration Test
+name: Full Sync
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
     branches:
       - master
 jobs: 
-  run-full-sync:
+  full-sync:
     runs-on: [self-hosted, linux, x64]
     timeout-minutes: 4320
     steps:
@@ -21,15 +21,44 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    - name: Build
+    - name: Build Node
       run: ./make.sh build
-    - name: Remove Dirs
+    - name: Remove Data Dirs
       run: rm -rf defi
-    - name: Create Dirs
+    - name: Create Data Dirs
       run: mkdir -p defi
-    - name: run
+    - name: Run Node
       run: ./src/defid -datadir="./defi" -server -rpcuser=bob -rpcpassword=bob -daemon
-    - name: Wait for node
+    - name: Sync to Tip
       run: |
-        sleep 20
         cargo run --manifest-path="./ci/node-monitor/Cargo.toml" --release -- --rpcuser="bob" --rpcpassword="bob"
+    - name: Log Debug
+      run: cat ./defi/debug.log
+  snapshot-sync:
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 4320
+    steps:
+    - name: Install latest nightly
+      uses: actions-rs/toolchain@v1
+      with:
+          toolchain: nightly
+          override: true
+          components: rustfmt, clippy
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Build Node
+      run: ./make.sh build
+    - name: Remove Data Dirs
+      run: rm -rf defi
+    - name: Download Snapshot
+      run: curl -s https://defi-snapshots-europe.s3.eu-central-1.amazonaws.com/index.txt | tail -n 1 | xargs -I{} wget -O snapshot.zip https://defi-snapshots-europe.s3.eu-central-1.amazonaws.com/{}
+    - name: Extract Snapshot
+      run: unzip snapshot.zip -d defi
+    - name: Run Node
+      run: ./src/defid -datadir="./defi" -server -rpcuser=bob -rpcpassword=bob -daemon
+    - name: Sync to Tip
+      run: |
+        cargo run --manifest-path="./ci/node-monitor/Cargo.toml" --release -- --rpcuser="bob" --rpcpassword="bob"
+    - name: Log Debug
+      run: cat ./defi/debug.log
